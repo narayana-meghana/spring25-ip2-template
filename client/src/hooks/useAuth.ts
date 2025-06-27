@@ -33,8 +33,9 @@ const useAuth = (authType: 'login' | 'signup') => {
    * Toggles the visibility of the password input field.
    */
   const togglePasswordVisibility = () => {
-    // TODO - Task 1: Toggle password visibility
+    setShowPassword(prev => !prev);
   };
+ 
 
   /**
    * Handles changes in input fields and updates the corresponding state.
@@ -46,8 +47,15 @@ const useAuth = (authType: 'login' | 'signup') => {
     e: ChangeEvent<HTMLInputElement>,
     field: 'username' | 'password' | 'confirmPassword',
   ) => {
-    // TODO - Task 1: Handle input changes for the fields
-  };
+    const value = e.target.value;
+    if (field === 'username') {
+      setUsername(value);
+    } else if (field === 'password') {
+      setPassword(value);
+    } else if (field === 'confirmPassword') {
+      setPasswordConfirmation(value);
+    }
+  }; 
 
   /**
    * Validates the input fields for the form.
@@ -56,9 +64,18 @@ const useAuth = (authType: 'login' | 'signup') => {
    * @returns {boolean} True if inputs are valid, false otherwise.
    */
   const validateInputs = (): boolean => {
-    // TODO - Task 1: Validate inputs for login and signup forms
-    // Display any errors to the user
-  };
+    if (!username || !password || (authType === 'signup' && !passwordConfirmation)) {
+      setErr('All fields are required.');
+      return false;
+    }
+
+    if (authType === 'signup' && password !== passwordConfirmation) {
+      setErr('Passwords do not match.');
+      return false;
+    }
+
+    return true;
+  };  
 
   /**
    * Handles the submission of the form.
