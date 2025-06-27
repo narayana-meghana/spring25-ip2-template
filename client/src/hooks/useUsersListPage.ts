@@ -36,9 +36,8 @@ const useUsersListPage = () => {
      * @param user the user to remove
      * @returns a list without the given user
      */
-    const removeUserFromList = (prevUserList: User[], user: User) => {
-      // TODO: Task 1 - Implement the function to remove a user from the list
-    };
+    const removeUserFromList = (prevUserList: User[], user: User): User[] =>
+      prevUserList.filter(u => u.username !== user.username);    
 
     /**
      * Adds a user to the userList, if not present. Otherwise updates the user.
@@ -46,10 +45,15 @@ const useUsersListPage = () => {
      * @param user the user to add
      * @returns a list with the user added, or updated if present.
      */
-    const addUserToList = (prevUserList: User[], user: User) => {
-      // TODO: Task 1 - Implement the function to add or update a user in the list
-      // Add the user to the front of the list if it doesn't already exist
-    };
+    const addUserToList = (prevUserList: User[], user: User): User[] => {
+      const index = prevUserList.findIndex(u => u.username === user.username);
+      if (index === -1) {
+        return [user, ...prevUserList];
+      }
+      const updatedList = [...prevUserList];
+      updatedList[index] = user;
+      return updatedList;
+    };   
 
     /**
      * Function to handle user updates from the socket.
@@ -57,8 +61,12 @@ const useUsersListPage = () => {
      * @param user - the updated user object.
      */
     const handleModifiedUserUpdate = (userUpdate: UserUpdatePayload) => {
-      // TODO: Task 1 - Update the user list based on the user update type.
+      const { user, type } = userUpdate;
+      setUserList(prev =>
+        type === 'deleted' ? removeUserFromList(prev, user) : addUserToList(prev, user)
+      );
     };
+
 
     fetchData();
 
@@ -70,7 +78,9 @@ const useUsersListPage = () => {
   }, [socket]);
 
   // TODO: Task 1 - Filter the user list based on the userFilter value
-  const filteredUserlist = [];
+  const filteredUserlist = userList.filter(user =>
+    user.username.includes(userFilter)
+  );
   return { userList: filteredUserlist, setUserFilter };
 };
 

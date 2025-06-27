@@ -28,8 +28,14 @@ const UsersListHeader = ({ userCount, setUserFilter }: UserHeaderProps) => {
     <div>
       <div className='space_between right_padding'>
         <div className='bold_title'>Users List</div>
-        {/* TODO: Task 1 - Add an input element for the user search bar.
-        Use the id 'user_search_bar' for the element. */}
+        <input
+          id="user_search_bar"
+          type="text"
+          className="input-text"
+          value={val}
+          onChange={handleInputChange}
+          placeholder="Search by username..."
+        />
       </div>
       <div className='space_between right_padding'>
         <div id='user_count'>{userCount} users</div>
