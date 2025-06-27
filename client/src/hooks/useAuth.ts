@@ -86,21 +86,24 @@ const useAuth = (authType: 'login' | 'signup') => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // TODO - Task 1: Validate inputs
-
-    let user: User;
+    const isValid = validateInputs();
+    if (!isValid) return;
 
     try {
-      // TODO - Task 1: Handle the form submission, calling appropriate API routes
-      // based on the auth type
+      let user: User;
+      if (authType === 'login') {
+        user = await loginUser({ username, password });
+      } else {
+        user = await createUser({ username, password });
+      }      
 
-      // Redirect to home page on successful login/signup
-      setUser(user);
-      navigate('/home');
+      setUser(user);    
+      navigate('/home'); 
     } catch (error) {
-      // TODO - Task 1: Display error message
+      setErr('Something went wrong. Please try again.');
     }
   };
+  
 
   return {
     username,
