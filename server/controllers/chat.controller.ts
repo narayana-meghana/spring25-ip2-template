@@ -31,24 +31,45 @@ const chatController = (socket: FakeSOSocket) => {
    * @param req The incoming request containing chat data.
    * @returns `true` if the body contains valid chat fields; otherwise, `false`.
    */
-  const isCreateChatRequestValid = (req: CreateChatRequest): boolean => false;
-  // TODO: Task 3 - Implement the isCreateChatRequestValid function.
+  const isCreateChatRequestValid = (req: CreateChatRequest): boolean => {
+    const { participants, messages } = req.body;
+
+    return (
+      Array.isArray(participants) &&
+      participants.every(p => typeof p === 'string') &&
+      Array.isArray(messages) &&
+      messages.every(
+        m =>
+          typeof m.msg === 'string' &&
+          typeof m.msgFrom === 'string' &&
+          (typeof m.msgDateTime === 'string' || typeof m.msgDateTime === 'undefined')
+      )
+    );
+  };
 
   /**
    * Validates that the request body contains all required fields for a message.
    * @param req The incoming request containing message data.
    * @returns `true` if the body contains valid message fields; otherwise, `false`.
    */
-  const isAddMessageRequestValid = (req: AddMessageRequestToChat): boolean => false;
-  // TODO: Task 3 - Implement the isAddMessageRequestValid function.
+  const isAddMessageRequestValid = (req: AddMessageRequestToChat): boolean => {
+    const { msg, msgFrom, msgDateTime } = req.body;
+
+    return (
+      typeof msg === 'string' &&
+      typeof msgFrom === 'string' &&
+      (typeof msgDateTime === 'string' || typeof msgDateTime === 'undefined')
+    );
+  };
 
   /**
    * Validates that the request body contains all required fields for a participant.
    * @param req The incoming request containing participant data.
    * @returns `true` if the body contains valid participant fields; otherwise, `false`.
    */
-  const isAddParticipantRequestValid = (req: AddParticipantRequest): boolean => false;
-  // TODO: Task 3 - Implement the isAddParticipantRequestValid function.
+  const isAddParticipantRequestValid = (req: AddParticipantRequest): boolean => {
+    return typeof req.body.userId === 'string';
+  };
 
   /**
    * Creates a new chat with the given participants (and optional initial messages).
