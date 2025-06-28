@@ -17,21 +17,35 @@ const useDirectMessage = () => {
   const [newMessage, setNewMessage] = useState('');
 
   const handleJoinChat = (chatID: string) => {
-    // TODO: Task 3 - Emit a 'joinChat' event to the socket with the chat ID function argument.
+    socket?.emit('joinChat', chatID);
   };
 
   const handleSendMessage = async () => {
-    // TODO: Task 3 - Implement the send message handler function.
-    // Whitespace-only messages should not be sent, and the current chat to send this message to
-    // should be defined. Use the appropriate service function to make an API call, and update the
-    // states accordingly.
+    if (!selectedChat || newMessage.trim() === '') return;
+
+    const updatedChat = await sendMessage(
+      {
+        msg: newMessage,
+        msgFrom: user.username,
+        msgDateTime: new Date(), 
+      },
+      selectedChat._id!
+    );       
+
+    if ('error' in updatedChat) return;
+
+    setSelectedChat(updatedChat);
+    setNewMessage('');
   };
 
   const handleChatSelect = async (chatID: string | undefined) => {
-    // TODO: Task 3 - Implement the chat selection handler function.
-    // If the chat ID is defined, fetch the chat details using the appropriate service function,
-    // and update the appropriate state variables. Make sure the client emits a socket event to
-    // subscribe to the chat room.
+    if (!chatID) return;
+
+    const fetchedChat = await getChatById(chatID);
+    if ('error' in fetchedChat) return;
+
+    setSelectedChat(fetchedChat);
+    handleJoinChat(chatID);
   };
 
   const handleUserSelect = (selectedUser: User) => {
@@ -39,36 +53,47 @@ const useDirectMessage = () => {
   };
 
   const handleCreateChat = async () => {
-    // TODO: Task 3 - Implement the create chat handler function.
-    // If the username to create a chat is defined, use the appropriate service function to create a new chat
-    // between the current user and the chosen user. Update the appropriate state variables and emit a socket
-    // event to join the chat room. Hide the create panel after creating the chat.
-  };
+    if (!chatToCreate || !user.username) return;
+
+    const newChat = await createChat([user.username, chatToCreate]);
+
+    if ('error' in newChat) return;
+
+    setChats(prev => [...prev, newChat]);
+    setSelectedChat(newChat);
+    handleJoinChat(newChat._id!);
+    setShowCreatePanel(false);
+    setChatToCreate('');
+  };  
 
   useEffect(() => {
     const fetchChats = async () => {
-      // TODO: Task 3 - Fetch all the chats with the current user and update the state variable.
+      const userChats = await getChatsByUser(user.username);
+      if (Array.isArray(userChats)) setChats(userChats);
     };
 
     const handleChatUpdate = (chatUpdate: ChatUpdatePayload) => {
-      // TODO: Task 3 - Implement the chat update handler function.
-      // This function is responsible for updating the state variables based on the
-      // socket events received. The function should handle the following cases:
-      // - A new chat is created (add the chat to the current list of chats)
-      // - A new message is received (update the selected chat with the new message)
-      // - Throw an error for an invalid chatUpdate type
-      // NOTE: For new messages, the user will only receive the update if they are
-      // currently subscribed to the chat room.
+      const { type, chat } = chatUpdate;
+
+      if (type === 'created') {
+        setChats(prev => [...prev, chat]);
+      } else if (type === 'newMessage') {
+        setSelectedChat(prev => (prev && prev._id === chat._id ? chat : prev));
+      } else {
+        throw new Error(`Unknown chatUpdate type: ${type}`);
+      }
     };
+
 
     fetchChats();
 
-    // TODO: Task 3 - Register the 'chatUpdate' event listener
+    socket?.on('chatUpdate', handleChatUpdate);
 
     return () => {
-      // TODO: Task 3 - Unsubscribe from the socket event
-      // TODO: Task 3 - Emit a socket event to leave the particular chat room
-      // they are currently in when the component unmounts.
+      socket?.off('chatUpdate', handleChatUpdate);
+      if (selectedChat?._id) {
+        socket?.emit('leaveChat', selectedChat._id);
+      }
     };
   }, [user.username, socket, selectedChat?._id]);
 

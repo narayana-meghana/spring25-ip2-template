@@ -15,9 +15,13 @@ const ChatsListCard = ({
   chat: Chat;
   handleChatSelect: (chatID: string | undefined) => void;
 }) => (
-  // TODO: Task 3 - This component should display a comma-separated list of participants in the chat,
-  // using the <p> tag. When the div is clicked, it should call the handleChatSelect function.
-  <div className='chats-list-card'></div>
+  <div
+    className='chats-list-card'
+    onClick={() => handleChatSelect(chat._id?.toString())}
+    style={{ cursor: 'pointer', padding: '1rem', borderBottom: '1px solid #ccc' }}
+  >
+    <p>{chat.participants.join(', ')}</p>
+  </div>
 );
 
 export default ChatsListCard;
