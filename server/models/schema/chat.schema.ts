@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 /**
  * Mongoose schema for the Chat collection.
@@ -7,6 +7,13 @@ import { Schema } from 'mongoose';
  * - `messages`: an array of ObjectIds referencing the Message collection.
  * - Timestamps store `createdAt` & `updatedAt`.
  */
-// TODO: Task 3 - Define the schema for the Chat
+
+const chatSchema = new Schema(
+    {
+        participants: [{ type: String, required: true }],
+        messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+    },
+    { timestamps: true }
+);
 
 export default chatSchema;
