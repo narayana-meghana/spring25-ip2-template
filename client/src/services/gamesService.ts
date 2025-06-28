@@ -9,7 +9,7 @@ const GAMES_API_URL = `${process.env.REACT_APP_SERVER_URL}/games`;
  * @returns A promise resolving to the created game instance.
  * @throws Error if there is an issue while creating the game.
  */
-const createGame = async (gameType: GameType): Promise<GameInstance> => {
+const createGame = async (gameType: GameType): Promise<string> => {
   const res = await api.post(`${GAMES_API_URL}/create`, {
     gameType,
   });
@@ -18,8 +18,9 @@ const createGame = async (gameType: GameType): Promise<GameInstance> => {
     throw new Error('Error while creating a new game');
   }
 
-  return res.data;
+  return res.data; 
 };
+
 
 /**
  * Function to fetch a list of games based on optional filters for game type and status.
