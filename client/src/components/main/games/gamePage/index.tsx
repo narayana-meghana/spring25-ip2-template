@@ -21,29 +21,44 @@ const GamePage = () => {
    * fallback message for unknown types.
    */
   const renderGameComponent = (gameType: string) => {
-    // TODO: Task 2 - Implement a switch-case statement to render the appropriate
-    // game component based on the game type. Use a default <div> element to display
-    // a message for unknown game types.
+    if (!gameState) return <div>Loading game...</div>; // or handle it however you want
+
+    switch (gameType.toUpperCase()) {
+      case 'NIM':
+        return <NimGamePage gameState={gameState} />;
+      default:
+        return <div>Unsupported game type: {gameType}</div>;
+    }
   };
+
 
   return (
     <div className='game-page'>
       <header className='game-header'>
-        <h1>Nim Game</h1>
+        <h1>{gameState ? `${gameState.gameType} Game` : 'Loading...'}</h1>
         <p className='game-status'>Status: {gameState ? gameState.state.status : 'Not started'}</p>
       </header>
 
       <div className='game-controls'>
-        {/* TODO: Task 2 - Add a button that leaves the game on click.
-        Use the class name 'btn-leave-game' for styling. */}
+        <button className='btn-leave-game' onClick={handleLeaveGame}>
+          Leave Game
+        </button>
       </div>
 
-      {/* TODO: Task 2 - Conditionally render the correct game component based on the type */}
+      {error && (
+        <div className='game-error'>
+          <p>Error: {error}</p>
+        </div>
+      )}
 
-      {/* Conditionally render an error message if an error occurs.
-      Use a <div> element with the class name 'game-error' for styling. */}
+      {gameState ? (
+        renderGameComponent(gameState.gameType)
+      ) : (
+        <p>Loading game data...</p>
+      )}
     </div>
   );
+
 };
 
 export default GamePage;
