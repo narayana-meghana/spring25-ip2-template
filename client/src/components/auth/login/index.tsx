@@ -28,7 +28,7 @@ const Login = () => {
           type='text'
           className='input-text'
           value={username}
-          onChange={(e) => handleInputChange(e, 'username')}
+          onChange={e => handleInputChange(e, 'username')}
           required
         />
 
@@ -37,7 +37,7 @@ const Login = () => {
           type={showPassword ? 'text' : 'password'}
           className='input-text'
           value={password}
-          onChange={(e) => handleInputChange(e, 'password')}
+          onChange={e => handleInputChange(e, 'password')}
           required
         />
 

@@ -62,8 +62,7 @@ const NimGamePage = ({ gameState }: { gameState: GameInstance }) => {
             <button
               className='btn-submit'
               onClick={handleMakeMove}
-              disabled={gameState.players[gameState.state.moves.length % 2] !== user.username}
-            >
+              disabled={gameState.players[gameState.state.moves.length % 2] !== user.username}>
               Submit Move
             </button>
           </div>

@@ -29,7 +29,7 @@ const Signup = () => {
           type='text'
           className='input-text'
           value={username}
-          onChange={(e) => handleInputChange(e, 'username')}
+          onChange={e => handleInputChange(e, 'username')}
           required
         />
 
@@ -38,7 +38,7 @@ const Signup = () => {
           type={showPassword ? 'text' : 'password'}
           className='input-text'
           value={password}
-          onChange={(e) => handleInputChange(e, 'password')}
+          onChange={e => handleInputChange(e, 'password')}
           required
         />
 
@@ -47,7 +47,7 @@ const Signup = () => {
           type={showPassword ? 'text' : 'password'}
           className='input-text'
           value={passwordConfirmation}
-          onChange={(e) => handleInputChange(e, 'confirmPassword')}
+          onChange={e => handleInputChange(e, 'confirmPassword')}
           required
         />
 

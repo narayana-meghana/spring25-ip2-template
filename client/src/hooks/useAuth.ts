@@ -35,7 +35,6 @@ const useAuth = (authType: 'login' | 'signup') => {
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);
   };
- 
 
   /**
    * Handles changes in input fields and updates the corresponding state.
@@ -47,7 +46,7 @@ const useAuth = (authType: 'login' | 'signup') => {
     e: ChangeEvent<HTMLInputElement>,
     field: 'username' | 'password' | 'confirmPassword',
   ) => {
-    const value = e.target.value;
+    const { value } = e.target;
     if (field === 'username') {
       setUsername(value);
     } else if (field === 'password') {
@@ -55,7 +54,7 @@ const useAuth = (authType: 'login' | 'signup') => {
     } else if (field === 'confirmPassword') {
       setPasswordConfirmation(value);
     }
-  }; 
+  };
 
   /**
    * Validates the input fields for the form.
@@ -75,7 +74,7 @@ const useAuth = (authType: 'login' | 'signup') => {
     }
 
     return true;
-  };  
+  };
 
   /**
    * Handles the submission of the form.
@@ -95,15 +94,14 @@ const useAuth = (authType: 'login' | 'signup') => {
         user = await loginUser({ username, password });
       } else {
         user = await createUser({ username, password });
-      }      
+      }
 
-      setUser(user);    
-      navigate('/home'); 
+      setUser(user);
+      navigate('/home');
     } catch (error) {
       setErr('Something went wrong. Please try again.');
     }
   };
-  
 
   return {
     username,

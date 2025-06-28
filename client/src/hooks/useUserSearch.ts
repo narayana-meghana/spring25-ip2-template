@@ -22,7 +22,7 @@ const useUserSearch = (setUserFilter: (search: string) => void) => {
     const input = e.target.value;
     setVal(input);
     setUserFilter(input);
-  };  
+  };
 
   return {
     val,

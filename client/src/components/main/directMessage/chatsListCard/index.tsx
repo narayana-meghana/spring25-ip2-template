@@ -18,8 +18,7 @@ const ChatsListCard = ({
   <div
     className='chats-list-card'
     onClick={() => handleChatSelect(chat._id?.toString())}
-    style={{ cursor: 'pointer', padding: '1rem', borderBottom: '1px solid #ccc' }}
-  >
+    style={{ cursor: 'pointer', padding: '1rem', borderBottom: '1px solid #ccc' }}>
     <p>{chat.participants.join(', ')}</p>
   </div>
 );

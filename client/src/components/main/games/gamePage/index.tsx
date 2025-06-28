@@ -31,7 +31,6 @@ const GamePage = () => {
     }
   };
 
-
   return (
     <div className='game-page'>
       <header className='game-header'>
@@ -51,14 +50,9 @@ const GamePage = () => {
         </div>
       )}
 
-      {gameState ? (
-        renderGameComponent(gameState.gameType)
-      ) : (
-        <p>Loading game data...</p>
-      )}
+      {gameState ? renderGameComponent(gameState.gameType) : <p>Loading game data...</p>}
     </div>
   );
-
 };
 
 export default GamePage;

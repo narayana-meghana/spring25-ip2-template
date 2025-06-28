@@ -47,7 +47,6 @@ const DirectMessage = () => {
           {chats.map(chat => (
             <ChatsListCard key={chat._id} chat={chat} handleChatSelect={handleChatSelect} />
           ))}
-
         </div>
         <div className='chat-container'>
           {selectedChat ? (

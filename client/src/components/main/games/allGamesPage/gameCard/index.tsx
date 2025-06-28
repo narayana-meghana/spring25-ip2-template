@@ -26,10 +26,7 @@ const GameCard = ({
     </ul>
 
     {game.state.status === 'WAITING_TO_START' && (
-      <button
-        className='btn-join-game'
-        onClick={() => handleJoin(game.gameID)}
-      >
+      <button className='btn-join-game' onClick={() => handleJoin(game.gameID)}>
         Join Game
       </button>
     )}

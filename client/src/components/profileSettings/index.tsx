@@ -90,7 +90,8 @@ const ProfileSettings: React.FC = () => {
                   onClick={() => setEditBioMode(false)}>
                   Cancel
                 </button>
-              </div>)}
+              </div>
+            )}
 
             <p>
               <strong>Date Joined:</strong>{' '}

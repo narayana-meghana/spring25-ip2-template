@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Chat, ChatUpdatePayload, Message, User } from '../types';
+import { Chat, ChatUpdatePayload, User } from '../types';
 import useUserContext from './useUserContext';
 import { createChat, getChatById, getChatsByUser, sendMessage } from '../services/chatService';
 
@@ -27,10 +27,10 @@ const useDirectMessage = () => {
       {
         msg: newMessage,
         msgFrom: user.username,
-        msgDateTime: new Date(), 
+        msgDateTime: new Date(),
       },
-      selectedChat._id!
-    );       
+      selectedChat._id!,
+    );
 
     if ('error' in updatedChat) return;
 
@@ -64,7 +64,7 @@ const useDirectMessage = () => {
     handleJoinChat(newChat._id!);
     setShowCreatePanel(false);
     setChatToCreate('');
-  };  
+  };
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -83,7 +83,6 @@ const useDirectMessage = () => {
         throw new Error(`Unknown chatUpdate type: ${type}`);
       }
     };
-
 
     fetchChats();
 

@@ -80,7 +80,6 @@ const useProfileSettings = () => {
     return true;
   };
 
-
   /**
    * Handler for resetting the password
    */
@@ -98,7 +97,6 @@ const useProfileSettings = () => {
     }
   };
 
-
   const handleUpdateBiography = async () => {
     if (!username) return;
 
@@ -112,7 +110,6 @@ const useProfileSettings = () => {
       setErrorMessage('Error updating biography');
     }
   };
-
 
   /**
    * Handler for deleting the user (triggers confirmation modal)

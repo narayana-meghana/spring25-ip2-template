@@ -18,9 +18,8 @@ const createGame = async (gameType: GameType): Promise<string> => {
     throw new Error('Error while creating a new game');
   }
 
-  return res.data; 
+  return res.data;
 };
-
 
 /**
  * Function to fetch a list of games based on optional filters for game type and status.

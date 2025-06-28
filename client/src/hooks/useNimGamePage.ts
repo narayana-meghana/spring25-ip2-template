@@ -33,7 +33,7 @@ const useNimGamePage = (gameState: GameInstance) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 1 && value <= 3) {
+    if (!Number.isNaN(value) && value >= 1 && value <= 3) {
       setMove(value);
     }
   };

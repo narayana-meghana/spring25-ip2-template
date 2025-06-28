@@ -24,19 +24,20 @@ const useAllGamesPage = () => {
       const games = await getGames(undefined, undefined);
       setAvailableGames(games);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to fetch games:', error);
     }
   };
 
   const handleCreateGame = async (gameType: GameType) => {
     try {
-      const newGameID = await createGame(gameType); 
-      navigate(`/games/${newGameID}`);             
+      const newGameID = await createGame(gameType);
+      navigate(`/games/${newGameID}`);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error creating game:', error);
     }
   };
-  
 
   const handleJoin = (gameID: string) => {
     navigate(`/games/${gameID}`);

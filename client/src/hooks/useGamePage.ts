@@ -26,6 +26,7 @@ const useGamePage = () => {
         await leaveGame(joinedGameID, user.username);
         socket?.emit('leaveGame', joinedGameID);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Failed to leave game:', err);
       }
     }
@@ -41,6 +42,7 @@ const useGamePage = () => {
         socket.emit('joinGame', id);
       } catch (err) {
         setError('Failed to join game. Please try again.');
+        // eslint-disable-next-line no-console
         console.error(err);
         navigate('/games');
       }
@@ -67,7 +69,7 @@ const useGamePage = () => {
       socket.off('gameUpdate', handleGameUpdate);
       socket.off('gameError', handleGameError);
     };
-  }, [gameID, socket, user.username]);
+  }, [gameID, socket, user.username, navigate]);
 
   return {
     gameState,
