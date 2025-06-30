@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import UserModel from '../../models/users.model';
 import {
   deleteUserByUsername,
@@ -90,7 +91,68 @@ describe('getUsersList', () => {
     expect(retrievedUsers[0].dateJoined).toEqual(safeUser.dateJoined);
   });
 
-  // TODO: Task 1 - Add more tests for getUsersList
+  it('should return empty array when no users exist', async () => {
+    mockingoose(UserModel).toReturn([], 'find');
+
+    const retrievedUsers = (await getUsersList()) as SafeUser[];
+
+    expect(retrievedUsers).toEqual([]);
+    expect(Array.isArray(retrievedUsers)).toBe(true);
+  });
+
+  it('should return multiple users in correct order (oldest to newest)', async () => {
+    const user1: SafeUser = {
+      _id: new mongoose.Types.ObjectId(),
+      username: 'user1',
+      dateJoined: new Date('2024-01-01'),
+      biography: '',
+    };
+
+    const user2: SafeUser = {
+      _id: new mongoose.Types.ObjectId(),
+      username: 'user2',
+      dateJoined: new Date('2024-02-01'),
+      biography: '',
+    };
+
+    mockingoose(UserModel).toReturn([user1, user2], 'find');
+
+    const retrievedUsers = (await getUsersList()) as SafeUser[];
+
+    expect(retrievedUsers).toHaveLength(2);
+    expect(retrievedUsers[0].username).toEqual('user1');
+    expect(retrievedUsers[1].username).toEqual('user2');
+    expect(retrievedUsers[0].dateJoined).toEqual(user1.dateJoined);
+    expect(retrievedUsers[1].dateJoined).toEqual(user2.dateJoined);
+  });
+
+  it('should return error when database error occurs', async () => {
+    mockingoose(UserModel).toReturn(new Error('Database connection failed'), 'find');
+
+    const getUsersError = await getUsersList();
+
+    expect('error' in getUsersError).toBe(true);
+    if ('error' in getUsersError) {
+      expect(getUsersError.error).toContain('Error occurred when fetching users');
+    }
+  });
+
+  it('should not include password field in returned users', async () => {
+    const userWithoutPassword = {
+      _id: new mongoose.Types.ObjectId(),
+      username: 'testuser',
+      dateJoined: new Date('2024-01-01'),
+      biography: 'Test bio',
+    };
+
+    mockingoose(UserModel).toReturn([userWithoutPassword], 'find');
+
+    const retrievedUsers = (await getUsersList()) as SafeUser[];
+
+    expect(Object.prototype.hasOwnProperty.call(retrievedUsers[0], 'password')).toBe(false);
+    expect(retrievedUsers[0].username).toEqual('testuser');
+    expect(retrievedUsers[0].biography).toEqual('Test bio');
+  });
 });
 
 describe('loginUser', () => {
