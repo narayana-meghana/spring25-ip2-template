@@ -54,8 +54,10 @@ const chatController = (socket: FakeSOSocket) => {
    */
   const isAddMessageRequestValid = (req: AddMessageRequestToChat): boolean => {
     const { msg, msgFrom, msgDateTime } = req.body;
+    const { chatId } = req.params;
 
     return (
+      typeof chatId === 'string' &&
       typeof msg === 'string' &&
       typeof msgFrom === 'string' &&
       (typeof msgDateTime === 'string' || typeof msgDateTime === 'undefined')
@@ -68,7 +70,8 @@ const chatController = (socket: FakeSOSocket) => {
    * @returns `true` if the body contains valid participant fields; otherwise, `false`.
    */
   const isAddParticipantRequestValid = (req: AddParticipantRequest): boolean => {
-    return typeof req.body.userId === 'string';
+    const { chatId } = req.params;
+    return typeof req.body.userId === 'string' && typeof chatId === 'string';
   };
 
   /**
@@ -128,7 +131,7 @@ const chatController = (socket: FakeSOSocket) => {
         type: 'direct',
         msgDateTime: req.body.msgDateTime ? new Date(req.body.msgDateTime) : new Date(),
       });
-      
+
       if ('error' in newMessage) {
         res.status(500).json({ error: newMessage.error });
         return;
@@ -137,7 +140,7 @@ const chatController = (socket: FakeSOSocket) => {
         res.status(500).json({ error: 'Message creation returned no ID' });
         return;
       }
-      
+
       const updated = await addMessageToChat(chatId, newMessage._id.toString());
       if ('error' in updated) {
         res.status(500).json({ error: updated.error });
