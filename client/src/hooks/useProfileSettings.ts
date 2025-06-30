@@ -48,6 +48,7 @@ const useProfileSettings = () => {
         const data = await getUserByUsername(username);
         setUserData(data);
       } catch (error) {
+        setSuccessMessage(null);
         setErrorMessage('Error fetching user profile');
         setUserData(null);
       } finally {
@@ -70,10 +71,12 @@ const useProfileSettings = () => {
    */
   const validatePasswords = () => {
     if (!newPassword || !confirmNewPassword) {
+      setSuccessMessage(null);
       setErrorMessage('Password fields cannot be empty');
       return false;
     }
     if (newPassword !== confirmNewPassword) {
+      setSuccessMessage(null);
       setErrorMessage('Passwords do not match');
       return false;
     }
@@ -88,11 +91,12 @@ const useProfileSettings = () => {
 
     try {
       await resetPassword(username, newPassword);
+      setErrorMessage(null); 
       setSuccessMessage('Password reset successfully');
       setNewPassword('');
       setConfirmNewPassword('');
-      setErrorMessage(null);
     } catch (error) {
+      setSuccessMessage(null);
       setErrorMessage('Error resetting password');
     }
   };
@@ -104,9 +108,10 @@ const useProfileSettings = () => {
       const updatedUser = await updateBiography(username, newBio);
       setUserData(updatedUser);
       setEditBioMode(false);
+      setErrorMessage(null); 
       setSuccessMessage('Biography updated');
-      setErrorMessage(null);
     } catch (error) {
+      setSuccessMessage(null);
       setErrorMessage('Error updating biography');
     }
   };
@@ -122,21 +127,13 @@ const useProfileSettings = () => {
     setPendingAction(() => async () => {
       try {
         await deleteUser(username);
+        setErrorMessage(null); 
         setSuccessMessage('User deleted successfully');
         navigate('/');
       } catch (error) {
+        setSuccessMessage(null);
         setErrorMessage('Error deleting user');
       } finally {
-        setShowConfirmation(false);
-      }
-
-      try {
-        // Navigate home after successful deletion
-        navigate('/');
-      } catch (error) {
-        // Error handling
-      } finally {
-        // Hide the confirmation modal after completion
         setShowConfirmation(false);
       }
     });
