@@ -23,13 +23,15 @@ const useGamePage = () => {
   const handleLeaveGame = async () => {
     if (joinedGameID && gameState?.state.status !== 'OVER') {
       try {
-        await leaveGame(joinedGameID, user.username);
+        const updatedGame = await leaveGame(joinedGameID, user.username);
+        setGameState(updatedGame);
         socket?.emit('leaveGame', joinedGameID);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Failed to leave game:', err);
       }
     }
+    setJoinedGameID(null);
     navigate('/games');
   };
 
